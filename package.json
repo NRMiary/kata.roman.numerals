@@ -1,0 +1,23 @@
+{
+  "name": "api-roman-numerals",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/Miary/ws-kata-roman-numerals.git"
+  },
+  "author": "Miary",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/Miary/ws-kata-roman-numerals/issues"
+  },
+  "homepage": "https://gitlab.com/Miary/ws-kata-roman-numerals#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^6.2.0"
+  }
+}
