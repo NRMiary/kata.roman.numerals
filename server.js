@@ -1,21 +1,38 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000; // Utilisez le port spécifié dans l'environnement ou le port 3000 par défaut
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// API endpoint to convert roman numerals to numeric values
 app.get('/api/convert-roman', (req, res) => {
     const romanNumeral = req.query.roman;
-    const numericValue = convertRomanToNumeric(romanNumeral); // Utilisez votre propre fonction de conversion ici
-    res.json({ result: numericValue });
+    if (typeof romanNumeral === 'string' && romanNumeral.length > 0) {
+        const numericValue = convertRomanToNumeric(romanNumeral);
+        res.json({ result: numericValue });
+    } else {
+        res.status(400).json({ error: "Invalid Roman numeral" });
+    }
+});
+
+// API endpoint to convert arabic numbers to roman numerals
+app.get('/api/convert-arabic', (req, res) => {
+    const arabicNumber = req.query.arabic;
+    if (isNumeric(arabicNumber)) {
+        const romanValue = convertArabicToRoman(arabicNumber);
+        res.json({ result: romanValue });
+    } else {
+        res.status(400).json({ error: "Invalid Arabic number" });
+    }
 });
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
+// Function to convert Roman numerals to numeric values
 function convertRomanToNumeric(roman) {
-    // Définir un objet pour mapper les symboles romains à leurs valeurs numériques
+    // Define an object to map Roman symbols to their numeric values
     const romanNumerals = {
         I: 1,
         V: 5,
@@ -28,16 +45,16 @@ function convertRomanToNumeric(roman) {
 
     let result = 0;
 
-    // Parcourir le chiffre romain de droite à gauche
+    // Iterate through the Roman numeral from right to left
     for (let i = roman.length - 1; i >= 0; i--) {
         const currentSymbol = roman[i];
         const currentValue = romanNumerals[currentSymbol];
 
-        // Si la valeur du symbole courant est inférieure à la valeur du symbole suivant, soustrayez-la
+        // If the value of the current symbol is less than the value of the next symbol, subtract it
         if (i < roman.length - 1 && currentValue < romanNumerals[roman[i + 1]]) {
             result -= currentValue;
         } else {
-            // Sinon, ajoutez-la à la valeur totale
+            // Otherwise, add it to the total value
             result += currentValue;
         }
     }
@@ -45,3 +62,32 @@ function convertRomanToNumeric(roman) {
     return result;
 }
 
+// Function to check if a string is a valid Arabic number
+function isNumeric(input) {
+    return /^[0-9]+$/.test(input);
+}
+
+// Function to convert Arabic numbers to Roman numerals
+function convertArabicToRoman(arabic) {
+    const romanNumerals = {
+        1: "I", 4: "IV", 5: "V", 9: "IX",
+        10: "X", 40: "XL", 50: "L", 90: "XC",
+        100: "C", 400: "CD", 500: "D", 900: "CM",
+        1000: "M"
+    };
+
+    let roman = "";
+
+    const sortedValues = Object.keys(romanNumerals)
+        .map(Number)
+        .sort((a, b) => b - a);
+
+    for (const value of sortedValues) {
+        while (arabic >= value) {
+            roman += romanNumerals[value];
+            arabic -= value;
+        }
+    }
+
+    return roman;
+}
