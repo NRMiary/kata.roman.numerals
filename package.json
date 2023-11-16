@@ -17,6 +17,7 @@
   },
   "homepage": "https://gitlab.com/Miary/ws-kata-roman-numerals#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "mongodb": "^6.2.0"
   }
