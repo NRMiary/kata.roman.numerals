@@ -1,14 +1,21 @@
 // Object to store conversion results
 const conversionCache = {};
 
+// Function to replace "O" or "o" with "0" in the input
+function replaceOWithZero(input) {
+    return input.replace(/o/gi, '0');
+}
+
+// Function to check if the input is a valid Arabic number
 function isArabicNumber(input) {
-    // Replace the letter "O" or "o" with "0" in the Arabic input (case-insensitive)
-    const cleanedInput = input.replace(/o/gi, '0');
+    // First call the replacement function
+    const cleanedInput = replaceOWithZero(input);
 
     // Check if the input is a valid Arabic number
     return /^[0-9]+$/.test(cleanedInput);
 }
 
+// Function to check if the input is a valid Roman numeral
 function isRomanNumber(input) {
     // Check if the input is a valid Roman numeral
     const romanPattern = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
@@ -22,7 +29,7 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
     apiUrl = 'http://localhost:3000'; // Replace with the URL of your local API
 } else {
     // In production mode
-    apiUrl = 'https://ws-roman-numerals-c84c6a63b965.herokuapp.com'; // Use the environment variable for production URL
+    apiUrl = 'https://ws-roman-numerals-c84c6a63b965.herokuapp.com'; // Use the environment variable for the production URL
 }
 
 // Function to perform the conversion by calling the REST API
@@ -48,7 +55,7 @@ function performConversion(input, conversionType) {
     // Build the request object
     let requestOptions = {
         method: 'GET',
-        mode: 'cors',
+        mode: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -87,7 +94,7 @@ function updateResultOnUI(result) {
     let resultElement = document.getElementById('resultContainer');
 
     // Update the content of the element with the result
-    resultElement.textContent = `Result: ${result}`;
+    resultElement.textContent = `Résultat: ${result}`;
 }
 
 // Function to handle the conversion when the button is clicked
@@ -100,11 +107,9 @@ function handleConversion() {
             (conversionType === "arabicToRoman" && isArabicNumber(inputNumber))) {
             performConversion(inputNumber, conversionType);
         } else {
-            alert("Enter a valid number.");
+            alert("Entrez un nombre valide");
         }
-    } else {
-        alert("Select a valid conversion type.");
-    }
+    } 
 }
 
 // Attach the event handler to the button when the document is loaded
@@ -112,3 +117,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let convertButton = document.getElementById('convertButton');
     convertButton.addEventListener('click', handleConversion);
 });
+
+module.exports = {
+    replaceOWithZero,
+    conversionCache,
+    isArabicNumber
+};
