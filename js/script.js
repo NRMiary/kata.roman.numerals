@@ -48,6 +48,7 @@ function performConversion(input, conversionType) {
     // Build the request object
     let requestOptions = {
         method: 'GET',
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json'
         }
