@@ -1,0 +1,12 @@
+stages:
+  - deploy
+
+deploy_to_heroku:
+  stage: deploy
+  only:
+    - main  
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=ws-roman-numerals
