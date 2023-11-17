@@ -69,6 +69,31 @@ git push heroku main
 
 Cela créera une nouvelle application Heroku, ajoutera le code source à cette application et le déploiera sur Heroku. Lier avec le repo GitLab existant pour faciliter le CD.
 
+### Configuration du Pipeline CI/CD :
+
+- Créez un fichier .gitlab-ci.yml à la racine de votre projet GitLab 
+- Ajoutez le contenu suivant à votre fichier .gitlab-ci.yml pour configurer le pipeline de déploiement sur Heroku :
+
+````
+stages:
+  - deploy
+
+deploy_to_heroku:
+  stage: deploy
+  only:
+    - main  
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=NOM_DE_VOTRE_APP_HEROKU --api-key=HEROKU_API_KEY
+````
+- Remplacer NOM_DE_VOTRE_APP_HEROKU par le nom de l'application Heroku et le HEROKU_API_KEY par l'API key Heroku
+- Enregistrez ce fichier et poussez-le vers votre repo GitLab.
+- Accédez aux paramètres de votre projet GitLab, puis à l'onglet "CI/CD" ou "Pipelines".
+
+Lorsque vous apportez des modifications à votre repo GitLab (branche main), GitLab CI/CD déclenchera automatiquement un pipeline de déploiement sur Heroku.
+
+Vous pouvez suivre l'état du pipeline dans GitLab pour vérifier si le déploiement s'est déroulé avec succès ou s'il y a des erreurs.
+
 Consulter la documentation Heroku CLI pour en savoir plus sur les commandes disponibles.
-
-
