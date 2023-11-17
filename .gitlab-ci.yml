@@ -9,4 +9,4 @@ deploy_to_heroku:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=ws-roman-numerals
+    - dpl --provider=heroku --app=ws-roman-numerals --api-key=02022494-b5b4-4a2f-a7cb-ee1b2faa45fd
