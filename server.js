@@ -3,8 +3,12 @@ const app = express();
 const port = process.env.PORT || 3000;
 const cors = require('cors'); // Import the cors module
 
-// Configure CORS to allow all origins (for demonstration purposes, for local development)
-app.use(cors());
+// Configure CORS to allow all origins 
+app.use(cors({
+  origin: 'https://roman-numerals-conversion.netlify.app', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+}));
 
 app.use(express.json());
 
