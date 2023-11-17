@@ -39,10 +39,10 @@ function performConversion(input, conversionType) {
     // Build the API URL based on the conversion type
     if (conversionType === "arabicToRoman") {
         // Replace the letter "O" with "0" in the Arabic input
-        input = input.replace(/o/gi, '0');
-        apiUrl = `${apiUrl}/api/convert-arabic?arabic=${input}`; // Use the appropriate URL for Arabic to Roman conversion
+        input           = input.replace(/o/gi, '0');
+        apiUrlWithParam = `${apiUrl}/api/convert-arabic?arabic=${input}`; // Use the appropriate URL for Arabic to Roman conversion
     } else {
-        apiUrl = `${apiUrl}/api/convert-roman?roman=${input}`; // Your API URL for Roman to Arabic conversion
+        apiUrlWithParam = `${apiUrl}/api/convert-roman?roman=${input}`; // Your API URL for Roman to Arabic conversion
     }
 
     // Build the request object
@@ -54,7 +54,7 @@ function performConversion(input, conversionType) {
     };
 
     // Send a GET request to the API
-    return fetch(apiUrl, requestOptions)
+    return fetch(apiUrlWithParam, requestOptions)
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Invalid API response');
