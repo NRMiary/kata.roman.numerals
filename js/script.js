@@ -55,10 +55,11 @@ function performConversion(input, conversionType) {
     // Build the request object
     let requestOptions = {
         method: 'GET',
-        mode: 'same-origin',
+        mode: 'cors', 
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        credentials: 'omit'
     };
 
     // Send a GET request to the API
