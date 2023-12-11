@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-const cors = require('cors'); // Import the cors module
+const cors = require('cors');
+const convertRomanToNumeric = require('./controllers/convertRomanToNumeric.js');
+const convertArabicToRoman = require('./controllers/convertNumericToRoman.js');
 
-module.exports = app; // Export the app object
 // Configure CORS to allow all origins 
 app.use(cors({
   origin: 'https://roman-numerals-conversion.netlify.app', 
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: 'GET,PUT,POST',
   credentials: true,
 }));
 
@@ -27,7 +28,7 @@ app.get('/api/convert-roman', (req, res) => {
 // API endpoint to convert Arabic numbers to Roman numerals
 app.get('/api/convert-arabic', (req, res) => {
     const arabicNumber = req.query.arabic;
-    if (isNumeric(arabicNumber)) {
+    if (/^[0-9]+$/.test(arabicNumber)) {
         const romanValue = convertArabicToRoman(arabicNumber);
         res.json({ result: romanValue });
     } else {
@@ -35,70 +36,11 @@ app.get('/api/convert-arabic', (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
 
-// Function to convert Roman numerals to numeric values
-function convertRomanToNumeric(roman) {
-    const romanNumerals = {
-        I: 1,
-        V: 5,
-        X: 10,
-        L: 50,
-        C: 100,
-        D: 500,
-        M: 1000
-    };
-
-    let result = 0;
-
-    // Iterate through the Roman numeral from right to left
-    for (let i = roman.length - 1; i >= 0; i--) {
-        const currentSymbol = roman[i];
-        const currentValue = romanNumerals[currentSymbol];
-
-        // If the value of the current symbol is less than the value of the next symbol, subtract it
-        if (i < roman.length - 1 && currentValue < romanNumerals[roman[i + 1]]) {
-            result -= currentValue;
-        } else {
-            // Otherwise, add it to the total value
-            result += currentValue;
-        }
-    }
-
-    return result;
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
 }
 
-// Function to check if a string is a valid Arabic number
-function isNumeric(input) {
-    return /^[0-9]+$/.test(input);
-}
-
-// Function to convert Arabic numbers to Roman numerals
-function convertArabicToRoman(arabic) {
-    const romanNumerals = {
-        1: "I", 4: "IV", 5: "V", 9: "IX",
-        10: "X", 40: "XL", 50: "L", 90: "XC",
-        100: "C", 400: "CD", 500: "D", 900: "CM",
-        1000: "M"
-    };
-
-    let roman = "";
-
-    // Replace the letter "O" with "0" in the Arabic input
-    arabic = arabic.replace(/o/gi, '0');
-
-    const sortedValues = Object.keys(romanNumerals)
-        .map(Number)
-        .sort((a, b) => b - a);
-
-    for (const value of sortedValues) {
-        while (arabic >= value) {
-            roman += romanNumerals[value];
-            arabic -= value;
-        }
-    }
-
-    return roman;
-}
+module.exports = app;
