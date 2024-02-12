@@ -27,3 +27,5 @@ npm test
 ````
 
 Cela exécutera tous les tests unitaires définis dans votre projet.
+
+Pour plus de documentations, ils sont disponibles sur : https://gitlab.com/Miary/kata-roman-numerals/-/wikis/home 
